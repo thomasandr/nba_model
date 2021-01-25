@@ -101,10 +101,11 @@ final_game_model <- nba %>%
 
 # execute_predictions -----------------------------------------------------
 forecast_data <- odds_sheet %>% 
-  inner_join(odds_sheet, by ="commence_time") %>% 
-  filter(team.x != team.y) %>% 
+  inner_join(odds_sheet, by =c("commence_time" = "commence_time", 
+                               "team" = "opponent")) %>% 
+ # filter(team.x != team.y) %>% 
   select(commence_time, 
-         team = team.x,
+         team = team,
          opponent = team.y,
          home_ind = home_ind.x,
          market_probability = market_probs.x) %>% 
@@ -151,4 +152,4 @@ final_output <- forecast_data %>%
          home_odds = odds.x, 
          away_odds = odds.y)
 
-final_output
+write.csv(final_output, "20210124_predictive_model_output.csv", row.names = FALSE)

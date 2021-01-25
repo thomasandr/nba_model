@@ -31,14 +31,15 @@ import_team_data <- function(team_abrv) {
   table <- table %>% 
     as_tibble() %>% 
     transmute(game_date = ymd(Date),
-           home_ind,
-           opponent = Opp,
-           team = team_abrv,
-           win_ind = `W/L` == "W",
-           thp = as.numeric(`3P`),
-           twp = as.numeric(FG) - thp,
-           ft = as.numeric(FT)
-           )
+               home_ind,
+               opponent = Opp,
+               team = team_abrv,
+               points = Tm,
+               win_ind = `W/L` == "W",
+               thp = as.numeric(`3P`),
+               twp = as.numeric(FG) - thp,
+               ft = as.numeric(FT)
+              )
   
   return(table)
 }
@@ -61,5 +62,3 @@ for (team in nba_teams_short) {
     complete_data <- rbind(complete_data, import_team_data(team))
   }
 }
-
-View(complete_data)

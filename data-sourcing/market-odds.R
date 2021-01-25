@@ -1,7 +1,8 @@
 # set up packages ---------------------------------------------------------
-
 library(httr)
 library(rjson)
+library(dplyr)
+library(tidyr)
 
 # set up url and params ---------------------------------------------------
 
@@ -43,15 +44,17 @@ odds_sheet <- df %>%
 odds_sheet <- odds_sheet %>% 
   transmute(commence_time, 
          team = home_team, 
+         opponent = away_team,
          odds = home_odds,
          home_ind = TRUE) %>% 
   bind_rows(transmute(odds_sheet,
                       commence_time, 
                       team = away_team, 
+                      opponent = home_team,
                       odds = away_odds,
                       home_ind = FALSE)) %>% 
   arrange(commence_time)
   
 #convert from odds to probabilities
 odds_sheet <- odds_sheet %>% 
-  mutate(probs = 1/odds)
+  mutate(market_probs = 1/odds)
